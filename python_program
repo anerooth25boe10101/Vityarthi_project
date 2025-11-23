@@ -1,1 +1,160 @@
+import random
 
+# list to keep track of everything
+activities = []
+
+quotes = [
+    "Passion is energy. Feel the power that comes from focusing on what excites you.",
+    "The only way to do great work is to love what you do.",
+    "Don't ask what the world needs. Ask what makes you come alive.",
+    "Skills are cheap. Passion is priceless.",
+    "Hard work for something we don't care about is called stress. Hard work for something we love is called passion."
+]
+
+def add_thing():
+    print("\n--- NEW ENTRY ---")
+    name = input("What activity did you do? (e.g., Coding, Painting, Gaming): ")
+    
+    # ask for enjoyment
+    while True:
+        try:
+            enjoyment = int(input(f"1. How much did you enjoy '{name}'? (1-10): "))
+            if 1 <= enjoyment <= 10:
+                break
+            print("Please enter a number between 1 and 10.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    # ask for focus
+    while True:
+        try:
+            focus = int(input("2. How focused were you? (1-10, 10 = Time flew by): "))
+            if 1 <= focus <= 10:
+                break
+            print("Please enter a number between 1 and 10.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+    
+    # ask for energy
+    while True:
+        try:
+            energy = int(input("3. Did you feel energized or drained afterwards? (1 = Drained, 10 = Energized): "))
+            if 1 <= energy <= 10:
+                break
+            print("Please enter a number between 1 and 10.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    # ask for curiosity
+    while True:
+        try:
+            curiosity = int(input("4. How eager are you to learn more about this? (1-10): "))
+            if 1 <= curiosity <= 10:
+                break
+            print("Please enter a number between 1 and 10.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    # total calculation
+    total = enjoyment + focus + energy + curiosity
+
+    entry = {
+        "name": name,
+        "points": total
+    }
+
+    activities.append(entry)
+    print(f"Saved! '{name}' has a Total Score of {total}/40.")
+
+def show_list():
+    print("\n--- YOUR ACTIVITY LOG ---")
+    if len(activities) == 0:
+        print("No entries yet. Go do something fun!")
+        return
+
+    print(f"{'Activity':<15} | {'Score':<5} | {'Graph'}")
+    print("-" * 50)
+    
+    for x in activities:
+        p = x['points']
+        # make a little graph
+        bars = int(p / 2)
+        visual = "|" * bars
+        print(f"{x['name']:<15} | {p:<5} | {visual}")
+
+def fight():
+    print("\n--- BATTLE MODE ---")
+    if len(activities) < 2:
+        print("You need at least 2 entries to battle. Go log more activities!")
+        return
+
+    # sort list to get the best ones
+    sorted_list = sorted(activities, key=lambda k: k['points'], reverse=True)
+    
+    one = sorted_list[0]
+    two = sorted_list[1]
+
+    print("If you were to do this for the rest of your life but didn't make any money off of it, which would you choose?")
+    print(f"A: {one['name']} (Rated: {one['points']})")
+    print(f"B: {two['name']} (Rated: {two['points']})")
+
+    while True:
+        ans = input("Which one wins? (Type A or B): ").upper()
+        if ans == 'A':
+            print(f"Winner: {one['name']}! This activity seems important to you.")
+            break
+        elif ans == 'B':
+            print(f"Winner: {two['name']}! This activity seems important to you.")
+            break
+        else:
+            print("Invalid choice. Please type A or B.")
+
+def analyze():
+    print("\n--- ANALYSIS ---")
+    if len(activities) == 0:
+        print("Not enough data to analyze yet.")
+        return
+
+    best = None
+    high_score = -1
+
+    for a in activities:
+        if a['points'] > high_score:
+            high_score = a['points']
+            best = a
+
+    print(f"Your top activity is: {best['name']}")
+    print(f"Score: {high_score}/40")
+    
+    # random quote
+    print("\n--- DAILY INSPIRATION ---")
+    print(random.choice(quotes))
+
+# main program loop starts here
+while True:
+    print("\n" + "="*40)
+    print("     THE PASSION DISCOVERY JOURNAL     ")
+    print("="*40)
+    print("1. Log a new activity")
+    print("2. View all logs (Graph)")
+    print("3. Analyze my top passion")
+    print("4. Battle Mode (Compare two)")
+    print("5. Exit")
+    
+    user_input = input("\nChoose an option (1-5): ")
+
+    if user_input == '1':
+        add_thing()
+    elif user_input == '2':
+        show_list()
+    elif user_input == '3':
+        analyze()
+    elif user_input == '4':
+        fight()
+    elif user_input == '5':
+        print("Goodbye! Keep exploring.")
+        break
+    else:
+        print("Invalid choice. Please try again.")
+    
+    input("\nPress Enter to continue...")
